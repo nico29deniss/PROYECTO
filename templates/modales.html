@@ -1,0 +1,43 @@
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="{{ url_for('login') }}" method="POST">
+        <div class="modal-header">
+          <h5 class="modal-title">Iniciar Sesión</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="email" name="email" class="form-control mb-2" placeholder="Email" required>
+          <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Entrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Register Modal -->
+<div class="modal fade" id="registerModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="{{ url_for('registrar_usuario') }}" method="POST">
+        <div class="modal-header">
+          <h5 class="modal-title">Registrar Usuario</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" name="nombre" class="form-control mb-2" placeholder="Nombre" required>
+          <input type="email" name="email" class="form-control mb-2" placeholder="Email" required>
+          <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
+          <input type="password" name="password2" class="form-control" placeholder="Contraseña" required>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Registrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

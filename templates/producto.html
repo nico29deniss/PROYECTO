@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+      <script>
+        setInterval(() => {
+            fetch('/validar_token')
+            .then(res => res.json())
+            .then(data => {
+                if (data.status !== 'ok') window.location.href = "{{ url_for('login') }}";
+            });
+        }, 5000);
+    </script>
+  <h2>Inventario de Productos</h2>
+<!-- Botón para volver al panel -->
+  <a href="{{ url_for('panel_usuario') }}" class="btn btn-secondary mb-3">← Volver al Panel</a>
+  <!-- Formulario crear producto -->
+  <form action="{{ url_for('crear_producto') }}" method="POST">
+  <input type="text" name="nombre_producto" placeholder="Nombre" required>
+  <input type="number" step="0.01" name="precio" placeholder="Precio" required>
+  <input type="number" name="id_categoria" placeholder="ID Categoría" required>
+  <input type="number" name="stock" placeholder="Stock" required>
+  <button type="submit">Crear</button>
+</form>
+
+  <!-- Tabla de productos -->
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Categoría</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for producto in productos %}
+      <tr>
+        <td>{{ producto.id_producto }}</td>
+        <td>{{ producto.nombre_producto }}</td>
+        <td>{{ producto.id_categoria }}</td>
+        <td>{{ producto.precio }}</td>
+        <td>{{ producto.stock }}</td>
+        <td>
+          <!-- Actualizar producto -->
+      <form action="{{ url_for('editar_producto', id_productos=producto.id_productos) }}" method="POST" style="display:inline-block;">
+          <input type="text" name="nombre_producto" value="{{ producto.nombre_producto }}">
+          <input type="number" name="id_categoria" value="{{ producto.id_categoria }}">
+          <input type="number" name="precio" value="{{ producto.precio }}">
+          <input type="number" name="stock" value="{{ producto.stock }}">
+          <button type="submit" class="btn btn-sm btn-primary">Actualizar</button>
+      </form>
+
+        <form action="{{ url_for('eliminar_producto', id_productos=producto.id_productos) }}" method="POST" style="display:inline-block;">
+          <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+        </form>
+
+
+
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+</div>
+{% endblock %}

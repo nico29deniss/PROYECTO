@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Venta</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .btn-cancel {
+            background-color: #dc3545;
+            margin-top: 10px;
+        }
+        .btn-cancel:hover {
+            background-color: #c82333;
+        }
+        #total-display {
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+     <script>
+        setInterval(() => {
+            fetch('/validar_token')
+            .then(res => res.json())
+            .then(data => {
+                if (data.status !== 'ok') window.location.href = "{{ url_for('login') }}";
+            });
+        }, 5000);
+    </script>
+</head>
+<body>
+
+   <h1>Registrar Nueva Venta</h1>
+<form action="{{ url_for('crear_venta') }}" method="POST" id="ventaForm">
+    <label for="id_cliente">Cliente:</label>
+    <select name="id_cliente" id="id_cliente" required>
+        {% for c in clientes %}
+            <option value="{{ c.id_cliente }}">{{ c.nombre }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="id_productos">Producto:</label>
+    <select name="id_productos" id="id_productos" required>
+        {% for p in productos %}
+            <option value="{{ p.id_productos }}" data-precio="{{ p.precio }}">{{ p.nombre_producto }} - ${{ p.precio }} (Stock: {{ p.stock }})</option>
+        {% endfor %}
+    </select>
+
+    <label for="cantidad">Cantidad:</label>
+    <input type="number" name="cantidad" id="cantidad" min="1" required>
+
+    <div id="total-display">Total: $0</div>
+
+    <button type="submit">Registrar Venta</button>
+</form>
+
+<a href="{{ url_for('ver_ventas') }}"><button type="button" class="btn-cancel">Cancelar</button></a>
+
+<script>
+    const productoSelect = document.getElementById('id_productos');
+    const cantidadInput = document.getElementById('cantidad');
+    const totalDisplay = document.getElementById('total-display');
+
+    function actualizarTotal() {
+        const precio = parseFloat(productoSelect.selectedOptions[0].dataset.precio);
+        const cantidad = parseInt(cantidadInput.value) || 0;
+        totalDisplay.textContent = "Total: $" + (precio * cantidad).toFixed(2);
+    }
+
+    productoSelect.addEventListener('change', actualizarTotal);
+    cantidadInput.addEventListener('input', actualizarTotal);
+</script>
+</body>
+</html>

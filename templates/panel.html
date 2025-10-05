@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+  <div class="text-center mt-5">
+    <div class="card mx-auto shadow p-4" style="max-width: 500px;">
+      <div class="card-body">
+        <h3 class="card-title mb-3">¡Bienvenido, {{ current_user.nombre }}! 🎉</h3>
+        <p class="card-text mb-4">Selecciona una opción para continuar:</p>
+
+        <a href="{{ url_for('ver_productos') }}" class="btn btn-primary mx-2 mb-2">Productos</a>
+        <a href="{{ url_for('ver_ventas') }}" class="btn btn-success mx-2 mb-2">Ventas</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-warning mx-2 mb-2">Cerrar sesión</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script de protección por token -->
+  <script>
+    setInterval(() => {
+        fetch('/validar_token')
+        .then(res => res.json())
+        .then(data => {
+            if (data.status !== 'ok') {
+                alert("Tu sesión ha expirado o se abrió en otra pestaña.");
+                window.location.href = "{{ url_for('login') }}";
+            }
+        });
+    }, 5000); // cada 5 segundos
+  </script>
+
+{% else %}
+  <div class="text-center mt-5">
+    <h3>Bienvenido a Heladería Colon 🍦</h3>
+    <p>Por favor, inicia sesión o regístrate para acceder al panel.</p>
+    <button class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registerModal">Registrar</button>
+  </div>
+{% endif %}
+
+{% endblock %}
+

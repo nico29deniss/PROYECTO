@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Cliente</title>
+</head>
+<body>
+    <h2>Registrar Cliente</h2>
+    <form method="POST" action="{{ url_for('crear_cliente') }}">
+        <label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" required>
+
+        <label for="direccion">Dirección:</label>
+        <input type="text" name="direccion" required>
+
+        <button type="submit">Guardar Cliente</button>
+    </form>
+</body>
+</html>

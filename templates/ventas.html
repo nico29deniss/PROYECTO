@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ventas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 90%;
+            margin: auto;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            margin: 5px;
+            font-size: 14px;
+            color: white;
+            background: #28a745;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background: #218838;
+        }
+        .btn-logout {
+            background: #dc3545;
+        }
+        .btn-logout:hover {
+            background: #c82333;
+        }
+        .flash {
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 5px;
+        }
+        .success { background-color: #c8e6c9; color: #155724; }
+        .danger { background-color: #f8d7da; color: #721c24; }
+    </style>
+    <script>
+        setInterval(() => {
+            fetch('/validar_token')
+            .then(res => res.json())
+            .then(data => {
+                if (data.status !== 'ok') window.location.href = "{{ url_for('login') }}";
+            });
+        }, 5000);
+    </script>
+</head>
+<body>
+    <h1>📊 Registro de Ventas</h1>
+    <div style="text-align:center; margin-bottom:20px;">
+        <a href="{{ url_for('crear_venta') }}" class="btn">➕ Nueva Venta</a>
+        <a href="{{ url_for('crear_cliente') }}" class="btn btn-primary">➕ Nuevo Cliente</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-logout">🚪 Cerrar Sesión</a>
+        <!-- Botón para volver al panel -->
+  <a href="{{ url_for('panel_usuario') }}" class="btn btn-secondary mb-3">← Volver al Panel</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID Venta</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for v in ventas %}
+            <tr>
+                <td>{{ v.id_ventas }}</td>
+                <td>{{ v.nombre_producto }}</td>
+                <td>{{ v.cantidad }}</td>
+                <td>${{ v.precio }}</td>
+                <td>{{ v.fecha }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>
+
